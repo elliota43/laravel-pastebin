@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use App\Models\Pastebin;
+use Illuminate\Support\Facades\Hash;
 
 class PastebinController extends Controller
 {
@@ -54,11 +55,11 @@ class PastebinController extends Controller
             'language' => 'required|string|in:text,markdown,php,javascript,json,python,php,html,css,sql,bash',
             'expires' => 'required|string|in:never,10min,1hr,1day,1week,1month',
             'visibility' => 'required|string|in:public,unlisted,private',
+            'password' => 'nullable|string|min:6|max:40'
         ];
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            dd($validator->errors());
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();  
@@ -66,21 +67,24 @@ class PastebinController extends Controller
 
         $validated = $validator->validated();
 
-        $title = $validated['title'];
+        $title = $validated['title'] ?? null;
         $content = $validated['content'];
         $language = $validated['language'];
         $expires = $validated['expires'];
         $visibility = $validated['visibility'];
+        $password = $validated['password'] ?? null;
 
         $pastebin = new Pastebin();
         $pastebin->title = $title;
         $pastebin->content = htmlentities($content);
         $pastebin->language = $language;
         $pastebin->expires_at = $this->calculateExpiryTimestamp($expires);
+        $pastebin->visibility = $visibility;
         $pastebin->hash = $pastebin->generateHash();
+        $pastebin->password = Hash::make($password);
         $pastebin->save();
 
-        dd($pastebin);
+        return redirect()->route('viewPastebin', ['hash' => $pastebin->hash]);
     }
 
     /**
@@ -88,7 +92,7 @@ class PastebinController extends Controller
      * converts expiration from form data into DateTime to be stored in DB
      *  
      * @param string $expires
-     * @return \DateTime|null
+     * @return int|null
      */
     protected function calculateExpiryTimestamp(string $expires)
     {

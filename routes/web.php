@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PastebinController;
 
 Route::get("/", function () {
-    return redirect()->route("home");
+    return redirect()->route("new");
 });
 
 

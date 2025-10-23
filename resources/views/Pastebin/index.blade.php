@@ -36,6 +36,19 @@
       <div class="card-header">
         <h1>Create a new paste</h1>
         <span class="hint">Quick tip: Press <kbd>Tab</kbd> inside the editor for a real tab character.</span>
+        @if ($errors->any())
+          <div class="error-box">
+            <div class="error-icon">⚠️</div>
+            <div class="error-message">
+              <ul style="margin:0; padding-left:16px;">
+                @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+            
+          </div>
+          @endif
       </div>
 
       <form class="card-body grid grid-2" method="POST" action="{{ route('handleNewPastebin') }}" method="POST" novalidate>

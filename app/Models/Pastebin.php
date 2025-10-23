@@ -49,6 +49,9 @@ class Pastebin extends Model
 
     public function getExpiresAt()
     {
+        if (!$this->expires_at) {
+            return "Never";
+        }
         return Carbon::createFromTimestamp($this->expires_at)->diffForHumans();
     }
 
