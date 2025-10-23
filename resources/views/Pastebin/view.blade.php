@@ -23,6 +23,12 @@
       .meta-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
 </head>
 <body>
   <div class="container">
@@ -86,7 +92,7 @@
         <div class="code-scroll" id="codeScroll">
           <div class="code">
             <div class="gutter" id="gutter" aria-hidden="true"></div>
-            <pre><code id="codeBlock" class="language-{{$pastebin->language}}">{{{$pastebin->getContent()}}}</code></pre>
+            <pre><code class="language-{{ $pastebin->language }}" id="codeBlock" class="language-{{$pastebin->language}}">{{{$pastebin->getContent()}}}</code></pre>
           </div>
         </div>
       </section>
